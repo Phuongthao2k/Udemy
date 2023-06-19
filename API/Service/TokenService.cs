@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using API.Entities;
 using API.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Service
@@ -20,7 +22,7 @@ namespace API.Service
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
             };
-
+       
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -34,6 +36,6 @@ namespace API.Service
             var token = tockenHandler.CreateToken(tokenDescriptor);
 
             return tockenHandler.WriteToken(token);
-        }
+        }       
     }
 }

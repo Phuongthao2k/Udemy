@@ -16,8 +16,6 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class AccountController : BaseApiController
     {
         private readonly DataContext _context;
@@ -28,14 +26,7 @@ namespace API.Controllers
             _context = context;
             _tokenService = tokenService;
         }
-
-        [HttpGet("register")] // POST: api/account/Register
-        public async Task<ActionResult<AppUser>> Register()
-        {
-            var users = await _context.Users.ToListAsync();
-            return users[0];
-        }
-
+       
         [HttpPost("register")] // POST: api/account/Register?username=sam&password=password
         public async Task<ActionResult<UserDto>> Register(LoginDto loginDto)
         {
@@ -54,8 +45,8 @@ namespace API.Controllers
 
             return new UserDto
             {
-                // Username = user.UserName,
-                // Token = _tokenService.CreateToken(user)
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
             };
         }
 
@@ -84,8 +75,8 @@ namespace API.Controllers
 
             return new UserDto
             {
-                // Username = user.UserName,
-                // Token = _tokenService.CreateToken(user)
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
             };
         }
 
@@ -106,8 +97,8 @@ namespace API.Controllers
 
             return new UserDto
             {
-                //Username = user.UserName,
-                //Token = _tokenService.CreateToken(user)
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
             };
         }
     }
