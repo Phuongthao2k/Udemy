@@ -1,4 +1,5 @@
 using System.Text;
+using API;
 using API.Data;
 using API.Extensions;
 using API.Interfaces;
@@ -21,5 +22,21 @@ app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("ht
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope()) 
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<DataContext>();
+        await context.Database.MigrateAsync();
+        await Seed.SeedUsers(context);
+    }
+    catch (System.Exception)
+    {
+        
+        throw;
+    }
+}
 
 app.Run();
