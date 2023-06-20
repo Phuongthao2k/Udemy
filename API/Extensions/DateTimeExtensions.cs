@@ -1,15 +1,15 @@
-namespace API.Extensions
+﻿namespace API.Extensions;
+
+public static class DateTimeExtensions
 {
-    public static class DateTimeExtensions
+    public static int CalculeAge(this DateOnly dob)
     {
-        public static int CalcuateAge(this DateOnly dob)
-        {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var age = today.Year - dob.Year;
+       var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-            if (dob > today.AddYears(-age)) age--;
+       var age = today.Year - dob.Year;
 
-            return age;
-        }
+       if(dob > today.AddYears(-age)) age--;
+       
+       return age;
     }
 }

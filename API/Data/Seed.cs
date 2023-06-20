@@ -1,30 +1,36 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using API.Data;
 using API.Entities;
-using Microsoft.EntityFrameworkCore;
 
-namespace API.Data
+namespace API;
+
+public class Seed
 {
-    public class Seed
+    public static async Task SeedUsers(DataContext dataContext) 
     {
-        public static async Task SeedUsers(DataContext context)
-        {
-            if(await context.Users.AnyAsync()) return;
-            var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
-            var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
-        var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
-        foreach (var user in users)
+        if(dataContext.Users.Any()) return;
+
+        var data = await File.ReadAllTextAsync("Data/UserSeedData.json");
+
+        var options = new JsonSerializerOptions {PropertyNameCaseInsensitive = true};
+
+        var users = JsonSerializer.Deserialize<List<AppUser>>(data,options);
+
+        foreach (var user in  users)
         {
             using var hmac = new HMACSHA512();
             user.UserName = user.UserName.ToLower();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
+
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Passw0rd"));
             user.PasswordSalt = hmac.Key;
 
-            context.Users.Add(user);
+            dataContext.Users.Add(user);
+
+
         }
 
-        await context.SaveChangesAsync();
-        }
+        await dataContext.SaveChangesAsync();
     }
 }
