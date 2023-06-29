@@ -27,13 +27,12 @@ namespace API.Controllers
 			_mapper = mapper;
 		}
 
-		[AllowAnonymous]
+		//[AllowAnonymous]
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+		public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
 		{
-			var users = await _userRepository.GetUsers();
-			var usersToReturn = _mapper.Map<IEnumerable<MemberDto>>(users);
-			return Ok(usersToReturn);
+			var users = await _userRepository.GetMembersAsync();
+			return Ok(users);
 		}
 
 		//[HttpGet("{id}")]
@@ -44,9 +43,9 @@ namespace API.Controllers
 		//}
 
 		[HttpGet("{username}")]
-		public async Task<ActionResult<AppUser>> GetUser(string username)
+		public async Task<ActionResult<MemberDto>> GetUser(string username)
 		{
-			var user = await _userRepository.GetUserByUsername(username);
+			var user = await _userRepository.GetMemberAsync(username);
 			return user;
 		}
 	}
