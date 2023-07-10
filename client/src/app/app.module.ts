@@ -11,7 +11,7 @@ import { MemberListComponent } from './members/member-list/member-list.component
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
-//import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './_modules/shared.module';
@@ -20,6 +20,9 @@ import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { MemberCardComponent } from './members/member-card/member-card.component';
+import { JwtInterceptor } from './_interceptors/jwt.interceptor';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import { MemberCardComponent } from './members/member-card/member-card.component
     NotFoundComponent,
     ServerErrorComponent,
     MemberCardComponent,
+    
   ],
   imports: [
     BrowserAnimationsModule,
@@ -42,10 +46,14 @@ import { MemberCardComponent } from './members/member-card/member-card.component
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    SharedModule
+    // BsDropdownModule.forRoot(),
+
+    SharedModule,
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+
   ],
   bootstrap: [AppComponent],
 })

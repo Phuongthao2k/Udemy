@@ -9,7 +9,7 @@ import { Member } from 'src/app/_models/member';
 })
 export class MemberCardComponent implements OnInit {
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
   @Input() member: Member | undefined;
 }
