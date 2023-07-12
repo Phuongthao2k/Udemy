@@ -22,6 +22,8 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { MemberCardComponent } from './members/member-card/member-card.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+
 
 
 @NgModule({
@@ -47,7 +49,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     HttpClientModule,
     FormsModule,
     // BsDropdownModule.forRoot(),
-
+    NgxGalleryModule,
     SharedModule,
   ],
   providers: [
