@@ -18,6 +18,7 @@ export class MembersService {
   }
 
   getMember(username: string) {
+    console.log(username);
     return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
 

@@ -16,90 +16,91 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
-    public class AccountController : BaseApiController
-    {
-        private readonly DataContext _context;
-        private readonly ITokenService _tokenService;
+	public class AccountController : BaseApiController
+	{
+		private readonly DataContext _context;
+		private readonly ITokenService _tokenService;
 
-        public AccountController(DataContext context, ITokenService tokenService)
-        {
-            _context = context;
-            _tokenService = tokenService;
-        }
-       
-        [HttpPost("register")] // POST: api/account/Register?username=sam&password=password
-        public async Task<ActionResult<UserDto>> Register(LoginDto loginDto)
-        {
-            if (await UserExists(loginDto.Username)) return BadRequest("Username is taken");
-            using var hmac = new HMACSHA512();
-            var user = new AppUser
-            {
-                UserName = loginDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+		public AccountController(DataContext context, ITokenService tokenService)
+		{
+			_context = context;
+			_tokenService = tokenService;
+		}
 
-            Console.Write(user);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+		[HttpPost("register")] // POST: api/account/Register?username=sam&password=password
+		public async Task<ActionResult<UserDto>> Register(LoginDto loginDto)
+		{
+			if (await UserExists(loginDto.Username)) return BadRequest("Username is taken");
+			using var hmac = new HMACSHA512();
+			var user = new AppUser
+			{
+				UserName = loginDto.Username.ToLower(),
+				PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password)),
+				PasswordSalt = hmac.Key
+			};
 
-            return new UserDto
-            {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
-        }
+			Console.Write(user);
+			_context.Users.Add(user);
+			await _context.SaveChangesAsync();
 
-        private async Task<bool> UserExists(string username)
-        {
-            return await _context.Users.AnyAsync(x => x.UserName == username);
-        }
+			return new UserDto
+			{
+				Username = user.UserName,
+				Token = _tokenService.CreateToken(user)
+			};
+		}
 
-        [HttpGet("login")]
-        public async Task<ActionResult<UserDto>> Login()
-        {
-            LoginDto loginDto =new LoginDto{ Username="agnes", Password = "agnes"};
-            var user = await _context.Users.SingleOrDefaultAsync(x =>
-                x.UserName == loginDto.Username);
+		private async Task<bool> UserExists(string username)
+		{
+			return await _context.Users.AnyAsync(x => x.UserName == username);
+		}
 
-            if (user == null) return Unauthorized("invalid username");
+		[HttpGet("login")]
+		public async Task<ActionResult<UserDto>> Login()
+		{
+			LoginDto loginDto = new LoginDto { Username = "agnes", Password = "agnes" };
+			var users = await _context.Users.ToListAsync();
+			var user = await _context.Users.SingleOrDefaultAsync(x =>
+				x.UserName == loginDto.Username);
 
-            using var hmac = new HMACSHA512();
+			if (user == null) return Unauthorized("invalid username");
 
-            var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-            Console.WriteLine(computeHash);
-            for (int i = 0; i < computeHash.Length; i++)
-            {
-                if (computeHash[i] != user.PasswordHash[i]) return Unauthorized(user.PasswordHash);
-            }
+			using var hmac = new HMACSHA512();
 
-            return new UserDto
-            {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
-        }
+			var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+			Console.WriteLine(computeHash);
+			for (int i = 0; i < computeHash.Length; i++)
+			{
+				if (computeHash[i] != user.PasswordHash[i]) return Unauthorized(user.PasswordHash);
+			}
 
-        [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
-        {
-            var user = await _context.Users.SingleOrDefaultAsync(x =>
-                x.UserName == loginDto.Username);
+			return new UserDto
+			{
+				Username = user.UserName,
+				Token = _tokenService.CreateToken(user)
+			};
+		}
 
-            if (user == null) return Unauthorized("invalid username");
+		[HttpPost("login")]
+		public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+		{
+			var user = await _context.Users.SingleOrDefaultAsync(x =>
+				x.UserName == loginDto.Username);
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-            var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-            for (int i = 0; i < computeHash.Length; i++)
-            {
-                if (computeHash[i] != user.PasswordHash[i]) return Unauthorized(user.PasswordSalt);
-            }
+			if (user == null) return Unauthorized("invalid username");
 
-            return new UserDto
-            {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
-        }
-    }
+			using var hmac = new HMACSHA512(user.PasswordSalt);
+			var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+			for (int i = 0; i < computeHash.Length; i++)
+			{
+				if (computeHash[i] != user.PasswordHash[i]) return Unauthorized(user.PasswordSalt);
+			}
+
+			return new UserDto
+			{
+				Username = user.UserName,
+				Token = _tokenService.CreateToken(user)
+			};
+		}
+	}
 }
