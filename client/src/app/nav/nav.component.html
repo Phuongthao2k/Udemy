@@ -19,14 +19,15 @@
         </li>
       </ul>
 
-      <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user">
-        <a class="dropdown-toggle text-light text-decoration-none" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">welcome {{user.username | titlecase}}</a>
-        <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item" routerLink="/member/edit">Edit Profile</a>
-          <a class="dropdown-item" (click)="logout()">Logout</a>
+      <div class="btn-group" dropdown *ngIf="account.username">
+        <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+          welcome {{account.username | titlecase}}<span class="caret"></span>
+        </button>
+        <div *dropdownMenu class="dropdown-menu" role="menu">
+          <li role="menuitem"><a class="dropdown-item" routerLink="/member/edit">Edit Profile</a></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="logout()">Logout</a></li>
         </div>
       </div>
-
       <form *ngIf="!(accountService.currentUser$ | async)" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off">
         <input class="form-control me-2" name="username" [(ngModel)]="model.username" type="text" placeholder="Username">
         <input class="form-control me-2" name="password" [(ngModel)]="model.password" type="password" placeholder="Password">

@@ -33,6 +33,12 @@ namespace API.Data
 							.ToListAsync();
 		}
 
+		public async Task<AppUser> GetUserByUsername(string username)
+		{
+			return await _context.Users
+							.Where(u => u.UserName == username)
+							.SingleOrDefaultAsync();
+		}
 		//public async Task<AppUser> GetUserById(int id)
 		//{
 		//	return await _context.Users.FindAsync(id);

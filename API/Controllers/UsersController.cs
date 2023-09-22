@@ -28,4 +28,14 @@ public class UsersController : BaseApiController
 		var user = await _userRepository.GetMemberAsync(username);
 		return user;
 	}
+
+	[HttpPut]
+	public async Task<ActionResult> UpdateUser(MemberUppdateDto memberUppdateDto)
+	{
+		var user = await _userRepository.GetUserByUsernameAsync(memberUppdateDto.username);
+		if(user == null) return NotFount();
+		_mapper.Map(memberUppdateDto, user);
+		if(await _userRepository.SaveAllAsync()) return NotContent();
+		return BadRequest("Failed to update user");
+	}
 }
