@@ -11,11 +11,10 @@ import { Member } from '../_models/member';
   styleUrls: ['./nav.component.css'],
 })
 export class NavComponent implements OnInit {
-  model: any = {};
+  model: any = {}
 
-  constructor(public accountService: AccountService, private router: Router,
-    private toastr: ToastrService) {
-    }
+  constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService) {
+  }
   ngOnInit(): void {
   }
 

@@ -2,18 +2,8 @@ using API.DTOs;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using API.DTOs;
-using API.Entities;
 using API.Extensions;
-using API.Helpers;
-using API.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Controllers;
 
@@ -22,7 +12,7 @@ public class UsersController : BaseApiController
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IMapper _mapper;
-    private readonly IPhotoService _photoService;
+	private readonly IPhotoService _photoService;
 
 	public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService)
 	{
@@ -48,12 +38,12 @@ public class UsersController : BaseApiController
 	[HttpPut]
 	public async Task<ActionResult> UpdateUser(MemberUppdateDto memberUppdateDto)
 	{
-		var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
-		if(user == null) return NotFound();
+		var username = User.GetUsername();
+		var user = await _userRepository.GetUserByUsernameAsync(username);
+		if (user == null) return NotFound();
 		_mapper.Map(memberUppdateDto, user);
 		_userRepository.Update(user);
-		if(await _userRepository.SaveAllAsync()) return NoContent();
+		if (await _userRepository.SaveAllAsync()) return NoContent();
 		return BadRequest("Failed to update user");
 	}
-	
 }
