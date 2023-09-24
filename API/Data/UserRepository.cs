@@ -18,6 +18,10 @@ namespace API.Data
 			_mapper = mapper;
 		}
 
+		public async Task<bool> SaveAllAsync(){
+        	return await _context.SaveChangesAsync() > 0;
+		}
+
 		public async Task<MemberDto> GetMemberAsync(string username)
 		{
 			return await _context.Users
@@ -33,15 +37,21 @@ namespace API.Data
 							.ToListAsync();
 		}
 
-		public async Task<AppUser> GetUserByUsername(string username)
+		public async Task<AppUser> GetUserByUsernameAsync(string username)
 		{
 			return await _context.Users
 							.Where(u => u.UserName == username)
 							.SingleOrDefaultAsync();
 		}
-		//public async Task<AppUser> GetUserById(int id)
-		//{
-		//	return await _context.Users.FindAsync(id);
-		//}
+		
+		public async Task<AppUser> GetUserByIdAsync(int id)
+			{
+				return await _context.Users.FindAsync(id);
+			}
+
+		public void Update(AppUser user)
+		{
+			_context.Entry(user).State = EntityState.Modified;
+		}
 	}
 }

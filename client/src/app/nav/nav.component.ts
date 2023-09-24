@@ -12,10 +12,6 @@ import { Member } from '../_models/member';
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  account: User = {
-    username: "Lisa",
-    token: ''
-  };
 
   constructor(public accountService: AccountService, private router: Router,
     private toastr: ToastrService) {
