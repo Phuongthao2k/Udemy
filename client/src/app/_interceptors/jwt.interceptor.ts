@@ -18,9 +18,10 @@ export class JwtInterceptor implements HttpInterceptor {
       next: user => {
         console.log('JwtInterceptor',user);
         if(user) {
+          console.log('JwtInterceptor',user);
           request = request.clone({
             setHeaders : {
-              Authorizator: `Bearer ${user.token}`
+              Authorization: `Bearer ${user.token}`
             }
           })
         }
