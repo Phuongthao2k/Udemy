@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "@angular/cli": "^16.0.2"
+    "@angular/cli": "^16.0.2",
+    "@angular/platform-browser": "^16.2.7",
+    "@kolkov/ngx-gallery": "^2.0.1",
+    "ng2-file-upload": "^5.0.0"
   }
 }
-

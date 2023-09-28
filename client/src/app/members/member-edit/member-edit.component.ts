@@ -37,11 +37,13 @@ export class MemberEditComponent implements OnInit {
   }
 
   loadMember() {
-    this.memberService.getMember('lisa').subscribe({
-      next: (member) => {
-        this.member = member;
-      },
-    });
+    if(this.user != null){
+      this.memberService.getMember(this.user.username).subscribe({
+        next: (member) => {
+          this.member = member;
+        },
+      });
+    }
   }
 
   updateMemper() {
@@ -50,6 +52,6 @@ export class MemberEditComponent implements OnInit {
         this.toastr.success('Profile update successfully');
         this.editForm?.reset(this.member);
       }
-    }) 
+    })
   }
 }
