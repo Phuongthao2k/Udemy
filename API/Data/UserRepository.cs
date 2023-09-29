@@ -18,8 +18,9 @@ namespace API.Data
 			_mapper = mapper;
 		}
 
-		public async Task<bool> SaveAllAsync(){
-        	return await _context.SaveChangesAsync() > 0;
+		public async Task<bool> SaveAllAsync()
+		{
+			return await _context.SaveChangesAsync() > 0;
 		}
 
 		public async Task<MemberDto> GetMemberAsync(string username)
@@ -40,14 +41,16 @@ namespace API.Data
 		public async Task<AppUser> GetUserByUsernameAsync(string username)
 		{
 			return await _context.Users
-							.Where(u => u.UserName == username)
-							.SingleOrDefaultAsync();
+				.Include(u => u.Photos)
+				.SingleOrDefaultAsync(x => x.UserName == username);
 		}
-		
+
 		public async Task<AppUser> GetUserByIdAsync(int id)
-			{
-				return await _context.Users.FindAsync(id);
-			}
+		{
+			return await _context.Users
+
+				.FindAsync(id);
+		}
 
 		public void Update(AppUser user)
 		{
