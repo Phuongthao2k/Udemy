@@ -26,6 +26,7 @@ export class DateInputComponent implements ControlValueAccessor {
   }
   registerOnTouched(fn: any): void {
   }
+  
   get control(): FormControl{
     return this.ngControl.control as FormControl;
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
       dateOfBirth: ['', Validators.required],
       city: ['', Validators.required],
       country: ['', Validators.required],
-      password: ['', [Validators.required, 
+      password: ['', [Validators.required,
         Validators.minLength(4), Validators.maxLength(8)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]],
     });
@@ -59,8 +59,8 @@ export class RegisterComponent implements OnInit {
   register() {
     const dob = this.getDateOnly(this.registerForm.controls['dateOfBirth'].value);
     const values = {...this.registerForm.value, dateOfBirth: dob};
-
-    this.accountService.register(this.registerForm.value).subscribe({
+    console.log(values);
+    this.accountService.register(values).subscribe({
       next: () => {
         this.router.navigateByUrl('/members');
       },
