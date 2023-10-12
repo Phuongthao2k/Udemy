@@ -5,9 +5,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FileUploadModule } from 'ng2-file-upload';
-import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
   declarations: [],
@@ -18,22 +18,23 @@ import { ReactiveFormsModule } from '@angular/forms';
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-righ',
     }),
-    NgxGalleryModule,
+
     NgxSpinnerModule.forRoot({
       type: 'line-scale-party'
     }),
     BsDatepickerModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PaginationModule.forRoot()
   ],
   exports: [
     BsDropdownModule,
     ToastrModule,
     TabsModule,
-    NgxGalleryModule,
     NgxSpinnerModule,
     FileUploadModule,
     BsDatepickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PaginationModule
   ]
 })
 

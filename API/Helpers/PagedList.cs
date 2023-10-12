@@ -22,7 +22,7 @@ namespace API.Helpers
 		{
 			var count = await source.CountAsync();
 
-			var items = await source.Take(pageNumber).Skip((pageSize - 1) * pageNumber).ToListAsync();
+			var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
 			return new PagedList<T>(items, count, pageNumber, pageSize);
 		}
